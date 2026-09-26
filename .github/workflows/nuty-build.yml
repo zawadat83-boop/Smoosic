@@ -21,6 +21,11 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Build Nuty bundle
         run: tools/nuty/dist.sh
+      - name: Security regression (MusicXML text must not execute script)
+        run: |
+          python3 -m pip install --quiet playwright==1.56.0
+          python3 -m playwright install --with-deps chromium
+          python3 tools/nuty/xss_test.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -32,7 +37,7 @@ jobs:
             dist/build.log
           retention-days: 30
       - name: Publish bundle to nuty-dist branch
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/nuty/')
+        if: success() && github.event_name == 'push' && startsWith(github.ref, 'refs/heads/nuty/')
         run: |
           set -euo pipefail
           SRC_SHA="$(git rev-parse HEAD)"

@@ -29,7 +29,7 @@ const getId = (str: string) => {
             <div class="py-2">It would be helpful if you could copy and paste the information below into a new issue on our GitHub
               page.</div>
             <div class="container-fluid py-4">
-              <textarea :id="getId('bug-text-area')" v-html="bodyText" class="col-12 long-text"></textarea>
+              <textarea :id="getId('bug-text-area')" :value="bodyText" class="col-12 long-text"></textarea>
             </div>
             <div class="py-4"><a :href="url" aria-label="Github link" target="_blank" tabindex="0">{{ url }}</a>
             </div>

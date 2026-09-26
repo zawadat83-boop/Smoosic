@@ -17,14 +17,22 @@ export class smoSerialize {
       dest[key] = src[key];
     });  
   }
+  /**
+   * Decode JavaScript-style unicode escapes (\uXXXX, \u{XXXXX}, \xXX) found in score text.
+   * Nuty fork: previously built with eval() on document text, which allowed script execution
+   * from a crafted MusicXML/SMO file. Only escape sequences are decoded; nothing is evaluated.
+   */
   static tryParseUnicode(text) {
-    let rv = text;
-    try {
-      eval('rv="' + text + '"');
-    } catch (ex) {
-      console.log('bad unicode');
+    if (typeof text !== 'string' || text.indexOf('\\') < 0) {
+      return text;
     }
-    return rv;
+    return text.replace(/\\u\{([0-9a-fA-F]{1,6})\}|\\u([0-9a-fA-F]{4})|\\x([0-9a-fA-F]{2})/g, (match, a, b, c) => {
+      try {
+        return String.fromCodePoint(parseInt(a || b || c, 16));
+      } catch (ex) {
+        return match;
+      }
+    });
   }
 
   // ### filteredMerge

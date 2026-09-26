@@ -166,8 +166,12 @@ import { buildDom, addFileLink, InputTrapper, draggable, closeDialogPromise, get
 import { renderVexTests } from './generateVexTests';
 import { SuiDurationNoteVue } from '../ui/dialogs/durations';
 import { SuiPitchDialogVue } from '../ui/dialogs/pitch';
+// Nuty fork: resolve class names without eval (names come from serialized scores).
 const getClass = (jsonString: string) => {
-    return eval('Smo.' + jsonString);
+    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(jsonString)) {
+      return undefined;
+    }
+    return (Smo as any)[jsonString];
 };
 export * from './application';
 export * from './common';
