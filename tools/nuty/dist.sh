@@ -17,7 +17,12 @@ const names=[...block.matchAll(/:\s*'([^']+)'/g)].map(m=>m[1]).filter(n=>n!=='ti
 console.log([...new Set(names)].join(' '));")
 
 rm -rf dist && mkdir -p "$OUT/soundfonts/FluidR3_GM" "$OUT/licenses"
-SMOOSIC_MODE=production node build/build.js > dist/build.log 2>&1 || { tail -50 dist/build.log; exit 1; }
+if ! SMOOSIC_MODE=production node build/build.js > dist/build.log 2>&1; then
+  # Surface the errors as GitHub annotations (readable without log access).
+  grep -E "ERROR|error TS|Module not found|Error:" dist/build.log | head -40 | sed 's/\x1b\[[0-9;]*m//g' | while IFS= read -r line; do echo "::error::${line}"; done
+  tail -40 dist/build.log
+  exit 1
+fi
 
 cp build/smoosic.js "$OUT/"
 [ -f build/smoosic.js.map ] && cp build/smoosic.js.map "$OUT/"
@@ -27,9 +32,9 @@ cp -r build/styles "$OUT/styles"
 rm -f "$OUT/styles/"*.map
 
 for inst in $INSTRUMENTS; do
-  curl -fsSL --retry 3 -o "$OUT/soundfonts/FluidR3_GM/${inst}-ogg.js" "$SOUNDFONT_BASE/${inst}-ogg.js"
+  curl -fsSL --retry 3 -o "$OUT/soundfonts/FluidR3_GM/${inst}-ogg.js" "$SOUNDFONT_BASE/${inst}-ogg.js" || { echo "::error::soundfont download failed: ${inst}"; exit 1; }
 done
-curl -fsSL --retry 3 -o "$OUT/soundfonts/percussion-ogg.js" "$PERCUSSION_URL"
+curl -fsSL --retry 3 -o "$OUT/soundfonts/percussion-ogg.js" "$PERCUSSION_URL" || { echo "::error::percussion soundfont download failed"; exit 1; }
 
 cp LICENSE.md "$OUT/licenses/smoosic-LICENSE.md"
 cp node_modules/jquery/LICENSE.txt "$OUT/licenses/jquery-LICENSE.txt"
