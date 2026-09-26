@@ -24,6 +24,9 @@ const webpackConfig = {
     extensions: ['.ts', '.tsx','.js', '.jsx']
   },
   devtool: isProduction ? 'source-map' : 'eval-source-map',
+  // Production mode defaults to emitOnErrors=false; upstream's pre-existing type errors would
+  // then suppress the bundle entirely. Emit like the development build does.
+  optimization: { emitOnErrors: true },
   externals: {
     jszip: 'JSZip'
   },
@@ -89,7 +92,7 @@ compiler.run((err, stats) => {
   }
   // Upstream has pre-existing TypeScript type errors in some .vue dialogs; webpack still emits a
   // working bundle. Fail only when the bundle was not emitted (e.g. syntax/module resolution errors).
-  if (!stats.compilation.assets['smoosic.js']) {
+  if (!require('fs').existsSync(path.join(BUILD_DIR, 'smoosic.js')) || !stats.compilation.assets['smoosic.js']) {
     process.exitCode = 1;
   } else if (stats.hasErrors()) {
     console.warn(`NUTY-TYPE-WARNINGS: ${stats.compilation.errors.length} (bundle emitted)`);
