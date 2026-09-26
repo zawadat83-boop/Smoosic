@@ -1506,7 +1506,7 @@ export const quickStartHtmlar = `(Arabic)
 <li><p>The piano tool is an alternate way of entering music, or can be dismissed by the close button in the lower left.</p>
 </li>
 </ul>
-<p><img src="https://imgur.com/nP16PMI.gif" alt="" width="640" height="480"></p>
+<p></p>
 `;
 
 
@@ -1519,7 +1519,7 @@ export const selectionHtmlar = `(Arabic)
 <li>with the navigation keys on the ribbon</li>
 <li>with the piano tool, to some extent.</li>
 </ol>
-<p><img src="https://imgur.com/q1qK3Pn.gif" alt=""></p>
+<p></p>
 <p>You can select multiple things with the keyboard navigation keys, by selecting &#39;shift-arrow&#39;, just like many applications.  There is a similar control for selection in the navigation ribbon.  Some operations, like changing pitch for instance, act on all the selected notes.</p>
 <p>Sometimes a selection of one line affects all the measures in that column (or all the measures of the system, if you like).  When you change the key, for instance, the selection determines where the key change starts.  If you have multiple measures selected, it applies to those measures, and then changes back to whatever it was before.</p>
 `;
@@ -1530,19 +1530,19 @@ export const enterDurationsHtmlar = `(Arabic)
 <p>There are actually 3 ways to do many duration operations - using the piano tool, using the computer keyboard, or using the button ribbon.  Like with many things, you should find entering duration using the keyboard fastest, once you have some experience with Smoosic.  But the ribbon or the </p>
 <h2 id="changing-note-length-with-the-keyboard">Changing note length with the keyboard</h2>
 <p>You can change the length of notes using the &#39;,&#39; and &#39;.&#39; (comma and period) keys, which halve and double the note lengths, respectively.  You can add a dot to the length of the note (multiplying length by 3/2 for the first dot, and 3/4 for the second dot, if you like to think of it that way) or remove a dot, using the &#39;&gt;&#39; and &#39;&lt;&#39;.  The mnemonic device for these is &#39;&gt;&#39; makes note duration greater.  &#39;&lt;&#39; makes note duration...less.  (On most QWERTY keyboards, comma shifted is &#39;&lt;&#39; and period shifted is &#39;&gt;&#39;).</p>
-<p><img src="https://imgur.com/5ZWq2Xe.gif" alt=""></p>
+<p></p>
 <p>Note how the selection is preserved as the notes get shorter.  When you change something, Smoosic will try to keep the selection as close as possible to what you had.  You can use the cursor navigation keys to move to a specific selected note.</p>
-<p><img src="https://imgur.com/woMw4RH.gif" alt=""></p>
+<p></p>
 <p>When you increase the length of a note, Smoosic always &#39;borrows&#39; from the next note in the measure that is eligible.  So when you double the length of the 8th note, it combines the 16th, and 2 32nd notes, and collapses them into a single quarter.  If Smoosic can&#39;t honor the request, it does nothing.  For instance, it can&#39;t remove the dot from a note with no dot, and it can&#39;t extend beyond the length of the measure.</p>
 <p>You can create tuplets from the keyboard by typing Ctrl-3, Ctrl-5 or Ctrl-7 for triplets, quintuplets, and septuplets, respectively.  Individual notes in a tuplet can be doubled and halved with the duration keys &#39;-&#39; (minus) and &#39;=&#39; (equals), just like non-tuplets.  You &#39;untupletify&#39; a tuplet by Ctrl-0.</p>
-<p><img src="https://imgur.com/uBpQwXD.gif" alt=""></p>
+<p></p>
 <h2 id="changing-note-length-with-piano-widget">Changing note length with piano widget</h2>
 <p>The piano widget is shown when the application starts, and can be restored from the left menu &#39;Piano&#39; button when closed.</p>
 <p>You can double or halve note duration, or add dot duration, to a note using the piano tool. </p>
-<p><img src="https://imgur.com/Rw4yDxP.gif" alt=""></p>
+<p></p>
 <h2 id="changing-note-length-from-the-button-ribbon">Changing note length from the button ribbon</h2>
 <p>All the duration commands can be accomplished from the ribbon buttons.  </p>
-<p><img src="https://imgur.com/n9bmamg.gif" alt=""></p>
+<p></p>
 <p>Note that the equivalent keyboard commands are also indicated on the right of each button, when it&#39;s available.  (there are only so many keys, so there are some ribbon buttons with no key shortcut). </p>
 `;
 
@@ -1552,16 +1552,16 @@ export const enterPitchesHtmlar = `(Arabic)
 <h2 id="your-first-smoosical-notes">Your first Smoosical notes</h2>
 <h3 id="notes-from-the-keyboard">Notes from the keyboard</h3>
 <p>The keys a-g on the computer keyboard will enter a corresponding note, A-G, on the staff (Most key commands in Smoosic have a mnemonic device).  The default behavior is for the cursor to advance when a note is entered in this way.  (Future behavior, auto-advance can be overridden). You navigate to the notes using the keyboard navigation arrows.</p>
-<p><img src="https://imgur.com/lxR0NI7.gif" alt=""></p>
+<p></p>
 <p>You change the octave from the keyboard using the &#39;_&#39; and &#39;+&#39; (underscore, aka shift-minus, and plus), and change notes chromatically using &#39;-&#39; and &#39;=&#39; key.  The mnemonic device for this is &#39;plus and minus&#39; for raising and lowering pitches.  You can change the enharmonic spelling of the note using the &#39;Shift-E&#39; (mnemonic: E for enharmonic - get it?).  And Shift-F gives you a courtesy, or cautionary, accidental (mnemonic - F comes after E).</p>
-<p><img src="https://imgur.com/1tC94sV.gif" alt=""></p>
+<p></p>
 <p>You can create chords and intervals using the number keys along the top of the keyboard.  The &#39;3&#39; key makes a third, the &#39;4&#39; key a fourth, and so on.  Shift+number gives you the interval down.</p>
-<p><img src="https://imgur.com/IwoeWi3.gif" alt=""></p>
+<p></p>
 <p>Note that the interval starts from the highest note in the chord, for intervals going up, and the lowest note in the chord, for intervals going down.  You can select individual pitches in the chord using &#39;Shift-Up Arrow&#39; as shown.  This is similar to how modifiers like dynamics are selected.  Once you have the pitch selected, you can change it using the up-down commands shows above, or change the enharmonic spelling.</p>
 <p>There is currently no way to remove a single pitch from the chord.  If you want to collapse the chord, just type a letter a-g on the keyboard, and it will be replaced with a single note.</p>
 <h3 id="notes-from-the-piano-tool">Notes from the piano tool</h3>
 <p>You can also add notes to your score with the piano tool, by clicking on the corresponding notes.</p>
-<p><img src="https://imgur.com/MOMlIg3.gif" alt=""></p>
+<p></p>
 <p>Clicking on the piano gives the selected note the piano pitch.  The octave of the note is based on the clef, so for treble clef, the &#39;C&#39; is middle &#39;C&#39;.  You can change the octave of the note, and move the pitch up and down.  The top buttons affect the pitch, and the bottom buttons navigate or change the length of the note.  Clicking on the chord button acts like a &#39;sustain&#39; that puts additional notes in chords.</p>
 <p>Everything that can be done from the piano widget, and most things in Smoosic generally, can be done more efficiently with keyboard commands. Once you are comfortable with the computer keyboard, you can free up some screen real-estate by closing the piano widget (cross control in lower left).  You can bring it up again with the piano menu button on the left.</p>
 `;

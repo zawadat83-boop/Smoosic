@@ -33,3 +33,5 @@ Load `jquery.slim.min.js`, `jszip.js` and `smoosic.js` from the local bundle, ne
 
 - `build/build.js`: `SMOOSIC_MODE=production` → minified bundle, external source map; non-zero exit only when the bundle is not emitted (upstream has pre-existing TS type errors in some `.vue` dialogs — reported as CI warnings, to be fixed separately).
 - `src/render/audio/samples.ts`: configurable `soundfontBaseUrl` and `percussionUrl` (defaults unchanged).
+- `src/ui/i18n/language_*.js`: removed animated help GIFs hosted on imgur.com (remote requests from help dialogs).
+- CI publishes the built bundle to the `nuty-dist` branch (Nuty fetches it by commit SHA and verifies `SHA256SUMS`).
