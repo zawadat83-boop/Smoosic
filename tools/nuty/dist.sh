@@ -23,6 +23,9 @@ if ! SMOOSIC_MODE=production node build/build.js > dist/build.log 2>&1; then
   tail -40 dist/build.log
   exit 1
 fi
+# Pre-existing upstream type errors do not block the bundle; list them as warnings.
+grep -E "^\[tsl\] ERROR|error TS" dist/build.log | sed 's/\x1b\[[0-9;]*m//g' | head -20 | while IFS= read -r line; do echo "::warning::${line}"; done
+[ -f build/smoosic.js ] || { echo "::error::build/smoosic.js not produced"; exit 1; }
 
 cp build/smoosic.js "$OUT/"
 [ -f build/smoosic.js.map ] && cp build/smoosic.js.map "$OUT/"

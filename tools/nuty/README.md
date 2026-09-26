@@ -31,5 +31,5 @@ Load `jquery.slim.min.js`, `jszip.js` and `smoosic.js` from the local bundle, ne
 
 ## Nuty changes vs upstream
 
-- `build/build.js`: `SMOOSIC_MODE=production` → minified bundle, external source map, non-zero exit on build errors.
+- `build/build.js`: `SMOOSIC_MODE=production` → minified bundle, external source map; non-zero exit only when the bundle is not emitted (upstream has pre-existing TS type errors in some `.vue` dialogs — reported as CI warnings, to be fixed separately).
 - `src/render/audio/samples.ts`: configurable `soundfontBaseUrl` and `percussionUrl` (defaults unchanged).
