@@ -31,6 +31,26 @@ jobs:
             dist/nuty-smoosic/VERSION
             dist/build.log
           retention-days: 30
+      - name: Publish bundle to nuty-dist branch
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/nuty/')
+        run: |
+          set -euo pipefail
+          SRC_SHA="$(git rev-parse HEAD)"
+          rm -rf /tmp/dist && cp -r dist/nuty-smoosic /tmp/dist
+          git config user.name "nuty-build"
+          git config user.email "nuty-build@users.noreply.github.com"
+          git fetch origin nuty-dist || true
+          if git show-ref --verify --quiet refs/remotes/origin/nuty-dist; then
+            git switch -C nuty-dist origin/nuty-dist
+          else
+            git switch --orphan nuty-dist
+          fi
+          git rm -rq --ignore-unmatch . >/dev/null 2>&1 || true
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -r /tmp/dist/. .
+          git add -A
+          git commit -qm "nuty bundle from ${GITHUB_REF_NAME}@${SRC_SHA}" || { echo "no changes"; exit 0; }
+          git push origin nuty-dist
       - name: Release
         if: startsWith(github.ref, 'refs/tags/nuty-v')
         env:
