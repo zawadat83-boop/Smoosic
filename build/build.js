@@ -7,8 +7,10 @@ const args = process.argv.slice(2);
 var command = args[0] ?? 'monolith';
 console.log(`command is ${command}`);
 const { webpack, DefinePlugin } = require('webpack');
+// SMOOSIC_MODE=production builds a minified bundle without inline source maps (used by the Nuty CI build).
+const isProduction = process.env.SMOOSIC_MODE === 'production';
 const webpackConfig = {
-  mode: 'development',
+  mode: isProduction ? 'production' : 'development',
   entry: path.join(BASE_DIR, 'src/application/exports.ts'),  
   output: {
     path: BUILD_DIR,
@@ -21,7 +23,7 @@ const webpackConfig = {
   resolve: {
     extensions: ['.ts', '.tsx','.js', '.jsx']
   },
-  devtool: 'eval-source-map',
+  devtool: isProduction ? 'source-map' : 'eval-source-map',
   externals: {
     jszip: 'JSZip'
   },
@@ -62,7 +64,7 @@ const webpackConfig = {
     new VueLoaderPlugin(),
     new DefinePlugin({
       __VUE_OPTIONS_API__ : true,
-      __VUE_PROD_DEVTOOLS__ : true,
+      __VUE_PROD_DEVTOOLS__ : !isProduction,
       __VUE_PROD_HYDRATION_MISMATCH_DETAILS__ : true
     }),    
     new CopyPlugin({
@@ -82,6 +84,11 @@ const compiler = webpack(webpackConfig);
 compiler.run((err, stats) => {
   if (err) {
     console.warn(err);
+    process.exitCode = 1;
+    return;
+  }
+  if (stats.hasErrors()) {
+    process.exitCode = 1;
   }
   console.log(stats.toString({
     colors: true

@@ -5,3 +5,4 @@ build/docs
 build/styles
 types/release/*
 types/tools/*
+dist

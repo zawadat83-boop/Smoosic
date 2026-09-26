@@ -83,6 +83,16 @@ export class SuiSampleMedia {
   static sampleOscMap: Record<string, SmoOscillatorInfo[]> = {};
   static instrumentChooser: Record<string, InstrumentSampleChooser> = {};
   static receivedBuffer: boolean = false;
+  /**
+   * Base URL of MIDI.js-format soundfonts (`<base>/<instrument>-ogg.js`).
+   * Empty string keeps smplr's default (remote GitHub Pages). Nuty sets a local path so
+   * playback works on an isolated intranet.
+   */
+  static soundfontBaseUrl: string = '';
+  /**
+   * Full URL of the percussion soundfont. Nuty overrides it with a local path.
+   */
+  static percussionUrl: string = 'https://smoosic.github.io/SmoSounds/drumfont/percussion-ogg.js';
   static getFamilyForInstrument(instKey: string): string {
     const sound = SuiSampleMedia.instrumentChooser[instKey];
     if (sound && sound.samples.length) {
@@ -103,7 +113,9 @@ export class SuiSampleMedia {
       const sampler = instrumentSampleMap[key];
       const obj: any = {};
       if (key === 'percussion') {
-        obj['instrumentUrl'] = 'https://smoosic.github.io/SmoSounds/drumfont/percussion-ogg.js';
+        obj['instrumentUrl'] = SuiSampleMedia.percussionUrl;
+      } else if (SuiSampleMedia.soundfontBaseUrl) {
+        obj['instrumentUrl'] = `${SuiSampleMedia.soundfontBaseUrl.replace(/\/$/, '')}/${sampler}-ogg.js`;
       } else {
         obj['instrument'] = sampler;
       }
