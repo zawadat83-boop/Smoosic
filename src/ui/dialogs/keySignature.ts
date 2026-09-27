@@ -100,7 +100,7 @@ export class SuiKeySignatureDialog extends SuiDialogAdapterBase<SuiKeySignatureA
             smoName: 'key',
             defaultValue: 'C',
             control: 'SuiDropdownComponent',
-            label: 'Tempo Mode',
+            label: 'Key',
             options: [{
               label: 'C Major',
               value: 'c',
