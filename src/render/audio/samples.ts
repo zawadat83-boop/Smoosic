@@ -93,6 +93,52 @@ export class SuiSampleMedia {
    * Full URL of the percussion soundfont. Nuty overrides it with a local path.
    */
   static percussionUrl: string = 'https://smoosic.github.io/SmoSounds/drumfont/percussion-ogg.js';
+  /**
+   * Nuty (ED-6/W88): when true, nothing is downloaded at start-up; `ensureLoaded` fetches only the soundfonts of
+   * instruments used in the score, right before playback.
+   */
+  static loadOnDemand: boolean = false;
+  static _context: AudioContext | null = null;
+  static _loading: Record<string, Promise<void>> = {};
+  static _loadOne(key: string): Promise<void> {
+    if (loadedSoundfonts[key]) {
+      return Promise.resolve();
+    }
+    if (SuiSampleMedia._loading[key] !== undefined) {
+      return SuiSampleMedia._loading[key];
+    }
+    const sampler = instrumentSampleMap[key] ?? instrumentSampleMap['piano'];
+    const obj: any = {};
+    if (key === 'percussion') {
+      obj['instrumentUrl'] = SuiSampleMedia.percussionUrl;
+    } else if (SuiSampleMedia.soundfontBaseUrl) {
+      obj['instrumentUrl'] = `${SuiSampleMedia.soundfontBaseUrl.replace(/\/$/, '')}/${sampler}-ogg.js`;
+    } else {
+      obj['instrument'] = sampler;
+    }
+    if (!SuiSampleMedia._context) {
+      SuiSampleMedia._context = new AudioContext() as unknown as AudioContext;
+    }
+    const instrument = new Soundfont(SuiSampleMedia._context, obj);
+    const promise = instrument.load.then(() => {
+      instrument.output.addEffect("reverb", new Reverb(SuiSampleMedia._context!), 0.1);
+      loadedSoundfonts[key] = instrument;
+    }).finally(() => { delete SuiSampleMedia._loading[key]; });
+    SuiSampleMedia._loading[key] = promise;
+    return promise;
+  }
+  /**
+   * Load the soundfonts for these instrument keys (unknown keys fall back to piano).
+   */
+  static async ensureLoaded(keys: string[], setProgress?: (percent: number) => void): Promise<void> {
+    const wanted = Array.from(new Set(keys.map((k) => (instrumentSampleMap[k] ? k : 'piano'))));
+    for (let i = 0; i < wanted.length; ++i) {
+      await SuiSampleMedia._loadOne(wanted[i]);
+      if (setProgress) {
+        setProgress(Math.round(((i + 1) / wanted.length) * 100));
+      }
+    }
+  }
   static getFamilyForInstrument(instKey: string): string {
     const sound = SuiSampleMedia.instrumentChooser[instKey];
     if (sound && sound.samples.length) {

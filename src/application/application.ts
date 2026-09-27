@@ -196,7 +196,7 @@ export class SuiApplication {
       }
 
       const navigation = this.navigation
-      if (navigation) {
+      if (navigation && !SuiSampleMedia.loadOnDemand) {
         navigation.showProgressModal('Loading audio samples');
         await SuiSampleMedia.samplePromise(SuiOscillator.audio, (percent) => {
           navigation.setProgress(percent);

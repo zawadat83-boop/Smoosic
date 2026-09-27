@@ -3,6 +3,7 @@
 import { SuiOscillator, SuiSampler, SuiOscillatorSoundfont } from './oscillator';
 import { SuiScoreView } from '../sui/scoreView';
 import { SmoScore } from '../../smo/data/score';
+import { SuiSampleMedia } from './samples';
 import { SmoSelector, SmoSelection } from '../../smo/xform/selections';
 import { SmoAudioPitch, SmoMusic } from '../../smo/data/music';
 import { SuiAudioAnimationParams } from './musicCursor';
@@ -505,6 +506,16 @@ export class SuiAudioPlayer {
     }
     SuiAudioPlayer._playingInstance = this;
     SuiAudioPlayer.playing = true;
+    if (SuiSampleMedia.loadOnDemand) {
+      const keys: string[] = [];
+      this.score.staves.forEach((staff) => {
+        Object.values(staff.measureInstrumentMap).forEach((inst: any) => keys.push(inst.instrument));
+      });
+      await SuiSampleMedia.ensureLoaded(keys.length ? keys : ['piano']);
+      if (!SuiAudioPlayer.playing) {
+        return;
+      }
+    }
     const startIndex = this.view.tracker.getFirstMeasureOfSelection()?.measureNumber.measureIndex ?? 0;
     await this.startPlayer(startIndex);
   }
